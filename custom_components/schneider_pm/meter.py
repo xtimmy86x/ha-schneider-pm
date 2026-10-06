@@ -10,6 +10,11 @@ from .registers import MEASUREMENTS, decode, read_blocks
 class UnsupportedMeter(ValueError):
     """The responding unit is not a supported PM3255."""
 
+    def __init__(self, model: str, registers: list[int] | None = None) -> None:
+        super().__init__(model)
+        self.model = model
+        self.registers = tuple(registers or ())
+
 
 class PM3255:
     """Read one meter through a unit on a shared connection."""
@@ -34,7 +39,7 @@ class PM3255:
         words = await self.read(50, 20)
         model = struct.pack(">20H", *words).split(b"\x00", 1)[0].decode("utf-8").strip()
         if model.upper() not in {"PM3255", "METSEPM3255"}:
-            raise UnsupportedMeter(model)
+            raise UnsupportedMeter(model, words)
         words = await self.read(130, 2)
         serial = (words[0] << 16) | words[1]
         if serial in (0, 0xFFFFFFFF):

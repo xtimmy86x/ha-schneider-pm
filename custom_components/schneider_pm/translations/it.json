@@ -26,7 +26,7 @@
     },
     "error": {
       "cannot_connect": "Impossibile leggere il contatore. Verifica IP, porta, protocollo, indirizzo Modbus e parametri RS485.",
-      "unsupported_model": "Il dispositivo non è un PM3255 supportato.",
+      "unsupported_model": "Il modello restituito dal dispositivo non è un PM3255 supportato. Consulta i registri di Home Assistant per il modello ricevuto e l’indirizzo Modbus.",
       "duplicate_address": "Indirizzo Modbus già utilizzato su questo gateway.",
       "already_configured": "Gateway o contatore già configurato.",
       "invalid_interval": "L’intervallo energie deve essere maggiore o uguale a quello delle misure.",
@@ -92,7 +92,7 @@
     },
     "error": {
       "cannot_connect": "Impossibile leggere il contatore. Verifica IP, porta, protocollo, indirizzo Modbus e parametri RS485.",
-      "unsupported_model": "Il dispositivo non è un PM3255 supportato.",
+      "unsupported_model": "Il modello restituito dal dispositivo non è un PM3255 supportato. Consulta i registri di Home Assistant per il modello ricevuto e l’indirizzo Modbus.",
       "duplicate_address": "Indirizzo Modbus già utilizzato su questo gateway.",
       "already_configured": "Gateway o contatore già configurato.",
       "invalid_interval": "L’intervallo energie deve essere maggiore o uguale a quello delle misure.",

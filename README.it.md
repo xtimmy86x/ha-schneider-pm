@@ -3,7 +3,7 @@
 Integrazione personalizzata per leggere i **PM3255** tramite un gateway
 Ethernet/RS485. Configurazione da interfaccia, senza YAML.
 
-**Versione 0.1.2, con icona e logo Schneider Electric inclusi.** I test automatici
+**Versione 0.1.3, con diagnostica del riconoscimento e logo Schneider Electric.** I test automatici
 utilizzano Home Assistant 2026.9.4 e un simulatore Modbus TCP locale.
 
 ## Installazione
@@ -89,6 +89,14 @@ automaticamente il recupero. Le nuove aggiunte richiedono invece che il
 contatore risponda. I timeout sono gestiti dalla connessione Modbus di HA.
 
 ## Prima prova sull’impianto
+
+Se aggiungendo un contatore compare «modello non supportato», apri
+**Impostazioni → Sistema → Registri** e cerca `Meter identification rejected`
+di `schneider_pm.config_flow`. L'avviso riporta l'indirizzo Modbus richiesto,
+il modello ricevuto e i 20 registri del modello (50–69) in esadecimale.
+Non occorre abilitare il debug: condividi quella riga per diagnosticare la risposta.
+L'avviso non include l'indirizzo del gateway né legge i registri del numero di serie.
+Il controllo sul modello resta attivo.
 
 Confronta tensioni, correnti, potenze ed energie con il display dei PM3255.
 Verifica entrambi i dispositivi. In caso di errori, scarica la diagnostica dalla

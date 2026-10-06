@@ -4,7 +4,7 @@ Custom integration for **Schneider Electric PM3255** meters connected through an
 Ethernet/RS485 gateway. Configure the gateway once, then add each meter by its
 Modbus address. No YAML is required.
 
-**Version 0.1.2 — includes local Schneider Electric brand images.**
+**Version 0.1.3 — includes meter identification diagnostics and local brand images.**
 Automated tests use Home Assistant 2026.9.4 and a local Modbus TCP simulator;
 they do not replace checking readings against your meter display.
 
@@ -140,6 +140,13 @@ Home Assistant device names explicitly overridden by the user take precedence
 over the name entered in this integration.
 
 ## Diagnostics and limits
+
+If adding a meter reports an unsupported model, open **Settings → System → Logs**
+and look for `Meter identification rejected` from `schneider_pm.config_flow`.
+The warning includes the requested Modbus unit ID, decoded model and the 20 model
+registers (50–69) in hexadecimal. Debug logging is not required. Share that line
+to diagnose unexpected model responses; the warning does not include the gateway
+address or read the serial-number registers. Model validation remains enabled.
 
 Download diagnostics from the integration entry: it includes protocol, polling
 intervals, unit IDs, availability and timestamps. Host, friendly names, serial

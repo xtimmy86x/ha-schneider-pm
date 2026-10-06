@@ -26,7 +26,7 @@
     },
     "error": {
       "cannot_connect": "Cannot read the meter. Check host, port, protocol, unit ID and RS485 settings.",
-      "unsupported_model": "The device is not a supported PM3255.",
+      "unsupported_model": "The model returned by the device is not a supported PM3255. Check the Home Assistant logs for the received model and Modbus unit ID.",
       "duplicate_address": "This Modbus address is already used on this gateway.",
       "already_configured": "Gateway or meter already configured.",
       "invalid_interval": "The energy interval must be at least the measurement interval.",
@@ -92,7 +92,7 @@
     },
     "error": {
       "cannot_connect": "Cannot read the meter. Check host, port, protocol, unit ID and RS485 settings.",
-      "unsupported_model": "The device is not a supported PM3255.",
+      "unsupported_model": "The model returned by the device is not a supported PM3255. Check the Home Assistant logs for the received model and Modbus unit ID.",
       "duplicate_address": "This Modbus address is already used on this gateway.",
       "already_configured": "Gateway or meter already configured.",
       "invalid_interval": "The energy interval must be at least the measurement interval.",

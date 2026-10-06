@@ -1,6 +1,7 @@
 """Configure a gateway and manage its meters without YAML."""
 
 import ipaddress
+import logging
 from copy import deepcopy
 from typing import Any
 
@@ -20,6 +21,8 @@ from .const import (
     entry_settings,
 )
 from .meter import PM3255, UnsupportedMeter
+
+_LOGGER = logging.getLogger(__name__)
 
 
 def normalize_host(host: str) -> str:
@@ -135,7 +138,14 @@ async def validate_meter(hass, settings, data, *, exclude=None, editing=None):
         return None, "duplicate_address"
     try:
         identity = await probe_meter(hass, settings, data["unit_id"])
-    except UnsupportedMeter:
+    except UnsupportedMeter as err:
+        _LOGGER.warning(
+            "Meter identification rejected: unit_id=%s, model=%r, "
+            "registers_50_69=[%s]. Expected PM3255 or METSEPM3255",
+            data["unit_id"],
+            err.model,
+            " ".join(f"{word:04X}" for word in err.registers),
+        )
         return None, "unsupported_model"
     except HomeAssistantError:
         return None, "connection_conflict"
