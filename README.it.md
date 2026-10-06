@@ -3,10 +3,15 @@
 Integrazione personalizzata per leggere i **PM3255** tramite un gateway
 Ethernet/RS485. Configurazione da interfaccia, senza YAML.
 
-**Prima versione 0.1.1, da validare sul contatore reale.** I test automatici
+**Versione 0.1.2, con icona e logo Schneider Electric inclusi.** I test automatici
 utilizzano Home Assistant 2026.9.4 e un simulatore Modbus TCP locale.
 
 ## Installazione
+
+Icona e logo sono inclusi in `custom_components/schneider_pm/brand`: copia anche
+questa cartella negli aggiornamenti manuali, poi riavvia Home Assistant.
+Se compare ancora il simbolo generico, ricarica il browser. Fonti e attribuzione
+del marchio sono indicate in [brand/README.md](custom_components/schneider_pm/brand/README.md).
 
 Richiede Home Assistant **2026.9.4 o successivo**; la versione verificata dai
 test è la 2026.9.4.

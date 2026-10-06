@@ -4,11 +4,16 @@ Custom integration for **Schneider Electric PM3255** meters connected through an
 Ethernet/RS485 gateway. Configure the gateway once, then add each meter by its
 Modbus address. No YAML is required.
 
-**Version 0.1.1 — initial implementation, awaiting real PM3255 field validation.**
+**Version 0.1.2 — includes local Schneider Electric brand images.**
 Automated tests use Home Assistant 2026.9.4 and a local Modbus TCP simulator;
 they do not replace checking readings against your meter display.
 
 [Guida in italiano](README.it.md)
+
+The integration includes its icon and logo in `custom_components/schneider_pm/brand`.
+Copy this folder too when updating manually, then restart Home Assistant. If the
+old placeholder remains visible, refresh the browser. Image sources and trademark
+attribution are recorded in [brand/README.md](custom_components/schneider_pm/brand/README.md).
 
 ## Requirements
 
