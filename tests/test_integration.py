@@ -113,7 +113,28 @@ async def setup_gateway(hass, entry, port):
     await hass.async_block_till_done()
 
 
-async def test_two_meters_shared_socket_states_and_unload(hass, entry, socket_enabled):
+async def test_two_meters_shared_socket_states_and_unload(
+    hass, entry, socket_enabled, monkeypatch, caplog
+):
+    original_get_or_create = dr.DeviceRegistry.async_get_or_create
+
+    def reject_deprecated_via_device(self, **kwargs):
+        # Enforce the announced HA 2027.8 removal for both entity platforms.
+        assert "via_device" not in kwargs
+        return original_get_or_create(self, **kwargs)
+
+    monkeypatch.setattr(
+        dr.DeviceRegistry, "async_get_or_create", reject_deprecated_via_device
+    )
+    registry = dr.async_get(hass)
+    gateway = registry.async_get_or_create(
+        config_entry_id=entry.entry_id, identifiers={(DOMAIN, entry.entry_id)}
+    )
+    existing_meter = registry.async_get_or_create(
+        config_entry_id=entry.entry_id,
+        identifiers={(DOMAIN, "123456")},
+        via_device_id=gateway.id,
+    )
     async with simulator() as (server, port):
         await setup_gateway(hass, entry, port)
         assert (
@@ -121,6 +142,20 @@ async def test_two_meters_shared_socket_states_and_unload(hass, entry, socket_en
             == 84
         )
         for serial in ("123456", "234567"):
+            device = registry.async_get_device_by_identifier(
+                (DOMAIN, serial), entry.entry_id
+            )
+            assert device.via_device_id == gateway.id
+            if serial == "123456":
+                assert device.id == existing_meter.id
+            for platform, key in [
+                ("sensor", "active_energy_import"),
+                ("binary_sensor", "connection"),
+            ]:
+                registered_entity = er.async_get(hass).async_get(
+                    entity_id(hass, serial, key, platform)
+                )
+                assert registered_entity.device_id == device.id
             voltage = hass.states.get(entity_id(hass, serial, "voltage_l1_n"))
             assert float(voltage.state) == 230
             energy = hass.states.get(entity_id(hass, serial, "active_energy_import"))
@@ -130,6 +165,7 @@ async def test_two_meters_shared_socket_states_and_unload(hass, entry, socket_en
             assert energy.attributes["unit_of_measurement"] == "kWh"
             factor = hass.states.get(entity_id(hass, serial, "power_factor_total"))
             assert float(factor.state) == pytest.approx(0.8)
+        assert "deprecated `via_device`" not in caplog.text
         await asyncio.gather(
             *(r.measurements.async_refresh() for r in entry.runtime_data.meters)
         )
