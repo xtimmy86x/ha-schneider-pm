@@ -1,9 +1,9 @@
 # Schneider PowerLogic — guida italiana
 
-Integrazione personalizzata per leggere i **PM3255** tramite un gateway
+Integrazione personalizzata per leggere i **PM3250 e PM3255** tramite un gateway
 Ethernet/RS485. Configurazione da interfaccia, senza YAML.
 
-**Versione 0.1.2, con icona e logo Schneider Electric inclusi.** I test automatici
+**Versione 0.1.4, con supporto PM3250 e PM3255 sullo stesso gateway.** I test automatici
 utilizzano Home Assistant 2026.9.4 e un simulatore Modbus TCP locale.
 
 ## Installazione
@@ -27,6 +27,12 @@ Non è inclusa nel catalogo HACS predefinito e non è ancora stata pubblicata un
 
 ## Primo avvio
 
+Il modello viene riconosciuto automaticamente e mostrato nel dispositivo. PM3250
+e PM3255 possono condividere lo stesso gateway: tutti i 40 sensori di misura
+attuali, comprese le energie per tariffa, usano registri comuni ai due modelli.
+Gli ingressi/uscite digitali e i registri storici specifici del PM3255 non sono
+utilizzati. Aggiornando restano valide le configurazioni e le entità PM3255 esistenti.
+
 1. Apri **Impostazioni → Dispositivi e servizi → Aggiungi integrazione**.
 2. Cerca **Schneider PowerLogic**.
 3. Inserisci nome, IP e porta del gateway.
@@ -35,7 +41,7 @@ Non è inclusa nel catalogo HACS predefinito e non è ancora stata pubblicata un
 5. Lascia inizialmente 10 secondi per le misure e 60 secondi per le energie.
 6. Aggiungi il PM3255 con indirizzo **1**, assegna un nome e seleziona
    **Aggiungi un altro contatore**.
-7. Aggiungi il PM3255 con indirizzo **2** e completa la procedura.
+7. Aggiungi il secondo contatore (PM3250 o PM3255) con indirizzo **2** e completa la procedura.
 
 Modello e numero di serie vengono letti per verificare il contatore. I parametri
 seriali, per esempio **19200, 8 bit, parità pari, 1 stop**, si configurano sui
@@ -90,7 +96,15 @@ contatore risponda. I timeout sono gestiti dalla connessione Modbus di HA.
 
 ## Prima prova sull’impianto
 
-Confronta tensioni, correnti, potenze ed energie con il display dei PM3255.
+Se aggiungendo un contatore compare «modello non supportato», apri
+**Impostazioni → Sistema → Registri** e cerca `Meter identification rejected`
+di `schneider_pm.config_flow`. L'avviso riporta l'indirizzo Modbus richiesto,
+il modello ricevuto e i 20 registri del modello (50–69) in esadecimale.
+Non occorre abilitare il debug: condividi quella riga per diagnosticare la risposta.
+L'avviso non include l'indirizzo del gateway né legge i registri del numero di serie.
+Il controllo sul modello resta attivo.
+
+Confronta tensioni, correnti, potenze ed energie con il display dei contatori.
 Verifica entrambi i dispositivi. In caso di errori, scarica la diagnostica dalla
 pagina dell’integrazione: esclude IP, nomi e numeri di serie, ma conserva gli
 indirizzi Modbus e lo stato delle letture.

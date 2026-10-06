@@ -1,4 +1,4 @@
-"""Read-only PM3255 protocol implementation."""
+"""Read-only protocol for the supported PM3250 and PM3255 meters."""
 
 import struct
 
@@ -8,10 +8,15 @@ from .registers import MEASUREMENTS, decode, read_blocks
 
 
 class UnsupportedMeter(ValueError):
-    """The responding unit is not a supported PM3255."""
+    """The responding unit is not a supported PowerLogic model."""
+
+    def __init__(self, model: str, registers: list[int] | None = None) -> None:
+        super().__init__(model)
+        self.model = model
+        self.registers = tuple(registers or ())
 
 
-class PM3255:
+class PowerLogicMeter:
     """Read one meter through a unit on a shared connection."""
 
     def __init__(self, unit: ModbusUnit, expected_serial: str | None = None) -> None:
@@ -33,13 +38,14 @@ class PM3255:
         """Validate model and read a stable serial number."""
         words = await self.read(50, 20)
         model = struct.pack(">20H", *words).split(b"\x00", 1)[0].decode("utf-8").strip()
-        if model.upper() not in {"PM3255", "METSEPM3255"}:
-            raise UnsupportedMeter(model)
+        canonical_model = model.upper().removeprefix("METSE")
+        if canonical_model not in {"PM3250", "PM3255"}:
+            raise UnsupportedMeter(model, words)
         words = await self.read(130, 2)
         serial = (words[0] << 16) | words[1]
         if serial in (0, 0xFFFFFFFF):
             raise ValueError("Invalid serial number")
-        return {"model": "PM3255", "serial": str(serial)}
+        return {"model": canonical_model, "serial": str(serial)}
 
     async def read_group(self, group: str) -> dict[str, float | None]:
         """Return an atomic group snapshot; do not expose partial stale data."""

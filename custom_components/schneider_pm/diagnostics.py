@@ -14,7 +14,7 @@ async def async_get_config_entry_diagnostics(hass, entry):
         "meters": [
             {
                 "unit_id": runtime.measurements.meter_config["unit_id"],
-                "model": "PM3255",
+                "model": runtime.measurements.meter_config["model"],
                 "measurements_available": runtime.measurements.last_update_success,
                 "energy_available": runtime.energy.last_update_success,
                 "last_success": runtime.measurements.last_success.isoformat()

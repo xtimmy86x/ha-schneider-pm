@@ -12,7 +12,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from homeassistant.util import dt as dt_util
 from modbus_connection import ModbusError
 
-from .meter import PM3255
+from .meter import PowerLogicMeter
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -24,7 +24,7 @@ class MeterCoordinator(DataUpdateCoordinator[dict[str, float | None]]):
         self,
         hass: HomeAssistant,
         entry: ConfigEntry,
-        meter: PM3255,
+        meter: PowerLogicMeter,
         config: dict,
         group: str,
         interval: int,
@@ -34,7 +34,7 @@ class MeterCoordinator(DataUpdateCoordinator[dict[str, float | None]]):
             hass,
             _LOGGER,
             config_entry=entry,
-            name=f"PM3255 {config['unit_id']} {group}",
+            name=f"{config['model']} {config['unit_id']} {group}",
             update_interval=timedelta(seconds=interval),
         )
         self.meter = meter

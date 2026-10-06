@@ -20,7 +20,7 @@ class MeterEntity(CoordinatorEntity[MeterCoordinator]):
             identifiers={(DOMAIN, config["serial"])},
             name=config["name"],
             manufacturer="Schneider Electric",
-            model="PM3255",
+            model=config["model"],
             serial_number=config["serial"],
             via_device=(DOMAIN, entry_id),
         )

@@ -1,6 +1,7 @@
 """Configure a gateway and manage its meters without YAML."""
 
 import ipaddress
+import logging
 from copy import deepcopy
 from typing import Any
 
@@ -19,7 +20,9 @@ from .const import (
     DOMAIN,
     entry_settings,
 )
-from .meter import PM3255, UnsupportedMeter
+from .meter import PowerLogicMeter, UnsupportedMeter
+
+_LOGGER = logging.getLogger(__name__)
 
 
 def normalize_host(host: str) -> str:
@@ -94,7 +97,7 @@ def meter_schema(defaults: dict | None = None, *, initial: bool = False) -> vol.
         vol.Required("unit_id", default=d.get("unit_id", 1)): vol.All(
             vol.Coerce(int), vol.Range(min=1, max=247)
         ),
-        vol.Required("name", default=d.get("name", "PM3255")): str,
+        vol.Required("name", default=d.get("name", "PowerLogic")): str,
     }
     if initial:
         fields[vol.Optional("add_another", default=False)] = bool
@@ -125,7 +128,7 @@ async def probe_meter(hass, settings: dict, unit_id: int) -> dict[str, str]:
     async with async_get_temporary_unit(
         hass, connection_params(settings), unit_id
     ) as unit:
-        return await PM3255(unit).identify()
+        return await PowerLogicMeter(unit).identify()
 
 
 async def validate_meter(hass, settings, data, *, exclude=None, editing=None):
@@ -135,7 +138,15 @@ async def validate_meter(hass, settings, data, *, exclude=None, editing=None):
         return None, "duplicate_address"
     try:
         identity = await probe_meter(hass, settings, data["unit_id"])
-    except UnsupportedMeter:
+    except UnsupportedMeter as err:
+        _LOGGER.warning(
+            "Meter identification rejected: unit_id=%s, model=%r, "
+            "registers_50_69=[%s]. Expected PM3250 or PM3255 "
+            "(optionally prefixed with METSE)",
+            data["unit_id"],
+            err.model,
+            " ".join(f"{word:04X}" for word in err.registers),
+        )
         return None, "unsupported_model"
     except HomeAssistantError:
         return None, "connection_conflict"
@@ -151,7 +162,7 @@ async def validate_meter(hass, settings, data, *, exclude=None, editing=None):
 
 
 class PowerLogicConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Set up a gateway and at least one responding PM3255."""
+    """Set up a gateway and at least one supported PowerLogic meter."""
 
     VERSION = 1
 
@@ -207,7 +218,7 @@ class PowerLogicConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     )
                 user_input = {
                     "unit_id": min(user_input["unit_id"] + 1, 247),
-                    "name": "PM3255",
+                    "name": "PowerLogic",
                 }
         return self.async_show_form(
             step_id="meter",

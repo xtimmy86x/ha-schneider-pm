@@ -1,8 +1,9 @@
-"""PM3255 register map, independent of Home Assistant.
+"""Shared PM3250/PM3255 register map, independent of Home Assistant.
 
 Source: Schneider DOCA0006EN, Basic Meter Data and PF register format.
 Numbers below are one-based *registers*. The wire address is register - 1.
 Only adjacent documented registers are combined; holes are never read.
+Every measurement below is documented as readable on both supported models.
 """
 
 import math
