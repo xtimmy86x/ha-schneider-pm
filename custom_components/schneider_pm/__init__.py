@@ -20,7 +20,7 @@ from .coordinator import (
     RuntimeData,
     SchneiderConfigEntry,
 )
-from .meter import PM3255
+from .meter import PowerLogicMeter
 
 PLATFORMS = [Platform.SENSOR, Platform.BINARY_SENSOR]
 
@@ -49,7 +49,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: SchneiderConfigEntry) ->
     meters = []
     for config in settings[CONF_METERS]:
         unit = async_get_unit(hass, entry, params, config["unit_id"])
-        meter = PM3255(unit, config["serial"])
+        meter = PowerLogicMeter(unit, config["serial"])
         fast = MeterCoordinator(
             hass, entry, meter, config, "measurements", settings[CONF_SCAN_INTERVAL]
         )

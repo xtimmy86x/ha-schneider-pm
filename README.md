@@ -1,10 +1,10 @@
 # Schneider PowerLogic for Home Assistant
 
-Custom integration for **Schneider Electric PM3255** meters connected through an
+Custom integration for **Schneider Electric PM3250 and PM3255** meters connected through an
 Ethernet/RS485 gateway. Configure the gateway once, then add each meter by its
 Modbus address. No YAML is required.
 
-**Version 0.1.3 — includes meter identification diagnostics and local brand images.**
+**Version 0.1.4 — supports PM3250 and PM3255 on the same gateway.**
 Automated tests use Home Assistant 2026.9.4 and a local Modbus TCP simulator;
 they do not replace checking readings against your meter display.
 
@@ -19,7 +19,7 @@ attribution are recorded in [brand/README.md](custom_components/schneider_pm/bra
 
 - Home Assistant **2026.9.4 or newer**. The automated compatibility baseline is
   2026.9.4; later releases are not yet separately tested.
-- One or more PM3255 meters; each must have a different RS485 address (1–247).
+- One or more PM3250 / PM3255 meters; each must have a different RS485 address (1–247).
 - A reachable Modbus TCP ↔ RTU gateway, or a transparent RTU-over-TCP bridge.
 - Serial settings must match on every meter and the gateway. These are set on
   the hardware, not in the integration.
@@ -51,6 +51,12 @@ default HACS catalog and no GitHub release has been published yet.
 
 ## Setup
 
+The model is detected automatically and stored for each device. PM3250 and PM3255
+can coexist on one gateway. All 40 measurement sensors currently exposed use
+registers documented for both models, including tariff energy. PM3255-only digital
+I/O and internal data logs are not used. Existing PM3255 configurations and entity
+IDs are preserved when updating.
+
 Enter a gateway name, hostname/IP, TCP port (usually 502), protocol and polling
 intervals. Choose:
 
@@ -64,7 +70,7 @@ Do not select transparent RTU framing for a gateway performing protocol conversi
 
 Next add each meter: address, friendly name, and optionally **Add another meter**.
 The integration reads the model and serial number before saving. This version
-accepts PM3255 only; other Schneider meters must not reuse its register map
+accepts PM3250 and PM3255; other Schneider meters must not reuse their register map
 without verification. Invalid addresses, duplicate addresses and duplicate
 serial numbers are rejected.
 
@@ -184,7 +190,7 @@ No access to a real gateway is needed.
 ## References
 
 - [Schneider PM3200 user manual and register map](https://productinfo.se.com/pm3200/)
-  (DOCA0006EN, PM3255 basic meter data and power-factor register format).
+  (DOCA0006EN, PM3250 / PM3255 basic meter data and power-factor register format).
 - [Home Assistant shared Modbus API](https://developers.home-assistant.io/docs/modbus/introduction/).
 - [Waveshare RS485 TO ETH (B)](https://www.waveshare.com/wiki/RS485_TO_ETH_(B)).
 

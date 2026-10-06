@@ -6,6 +6,7 @@ from contextlib import asynccontextmanager
 
 import pytest
 from homeassistant.components.sensor import SensorStateClass
+from homeassistant.data_entry_flow import FlowResultType
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
 
@@ -16,7 +17,7 @@ from custom_components.schneider_pm.diagnostics import (
 from custom_components.schneider_pm.registers import MEASUREMENTS
 
 
-def register_map(serial):
+def register_map(serial, model="PM3255"):
     """Return independently encoded meter responses, indexed from zero."""
     result = {}
 
@@ -24,7 +25,7 @@ def register_map(serial):
         for offset, word in enumerate(struct.unpack(f">{len(raw) // 2}H", raw)):
             result[register - 1 + offset] = word
 
-    put(50, b"PM3255".ljust(40, b"\0"))
+    put(50, model.encode().ljust(40, b"\0"))
     put(130, struct.pack(">I", serial))
     for item in MEASUREMENTS:
         if item.kind == "energy":
@@ -139,6 +140,49 @@ async def test_two_meters_shared_socket_states_and_unload(hass, entry, socket_en
         await hass.async_block_till_done()
         await asyncio.sleep(0.05)
         assert not server.clients
+
+
+async def test_add_pm3250_to_running_pm3255_gateway(hass, entry, socket_enabled):
+    """Reproduce adding unit 2 through options while unit 1 is polling."""
+    hass.config_entries.async_update_entry(
+        entry, data={**entry.data, "meters": entry.data["meters"][:1]}
+    )
+    async with simulator() as (server, port):
+        server.registers[2] = register_map(234567, "PM3250")
+        await setup_gateway(hass, entry, port)
+        first_energy = entity_id(hass, "123456", "active_energy_import")
+        result = await hass.config_entries.options.async_init(entry.entry_id)
+        result = await hass.config_entries.options.async_configure(
+            result["flow_id"], {"next_step_id": "add_meter"}
+        )
+        result = await hass.config_entries.options.async_configure(
+            result["flow_id"], {"unit_id": 2, "name": "Workshop"}
+        )
+        assert result["type"] == FlowResultType.CREATE_ENTRY
+        assert entry.options["meters"][1]["model"] == "PM3250"
+        await hass.async_block_till_done()
+
+        assert entity_id(hass, "123456", "active_energy_import") == first_energy
+        devices = dr.async_get(hass)
+        for serial, model in [("123456", "PM3255"), ("234567", "PM3250")]:
+            device = devices.async_get_device_by_identifier(
+                (DOMAIN, serial), entry.entry_id
+            )
+            assert device.model == model
+            voltage = hass.states.get(entity_id(hass, serial, "voltage_l1_n"))
+            energy = hass.states.get(entity_id(hass, serial, "active_energy_import"))
+            assert float(voltage.state) == 230
+            assert float(energy.state) == 123456.789
+        diagnostics = await async_get_config_entry_diagnostics(hass, entry)
+        assert [meter["model"] for meter in diagnostics["meters"]] == [
+            "PM3255",
+            "PM3250",
+        ]
+        assert entry.runtime_data.meters[1].energy.data["active_energy_tariff_4"] == (
+            123456.789
+        )
+        assert all(request[1] == 3 for request in server.requests)
+        await hass.config_entries.async_unload(entry.entry_id)
 
 
 async def test_offline_meter_startup_and_recovery(hass, entry, socket_enabled):
