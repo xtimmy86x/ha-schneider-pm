@@ -43,13 +43,29 @@ def nonempty_name(value: str) -> str:
     return value
 
 
+def normalize_text_fields(data: dict) -> tuple[dict, dict[str, str]]:
+    """Validate submitted text, keeping callables out of the UI schema."""
+    data = dict(data)
+    errors = {}
+    for key, validator, error in (
+        ("name", nonempty_name, "invalid_name"),
+        ("host", normalize_host, "invalid_host"),
+    ):
+        if key in data:
+            try:
+                data[key] = validator(data[key])
+            except vol.Invalid:
+                errors[key] = error
+    return data, errors
+
+
 def gateway_schema(defaults: dict | None = None) -> vol.Schema:
     """Connection framing and polling are user choices."""
     d = defaults or {}
     return vol.Schema(
         {
-            vol.Required("name", default=d.get("name", "PowerLogic")): nonempty_name,
-            vol.Required("host", default=d.get("host", "")): normalize_host,
+            vol.Required("name", default=d.get("name", "PowerLogic")): str,
+            vol.Required("host", default=d.get("host", "")): str,
             vol.Required("port", default=d.get("port", 502)): vol.All(
                 vol.Coerce(int), vol.Range(min=1, max=65535)
             ),
@@ -78,7 +94,7 @@ def meter_schema(defaults: dict | None = None, *, initial: bool = False) -> vol.
         vol.Required("unit_id", default=d.get("unit_id", 1)): vol.All(
             vol.Coerce(int), vol.Range(min=1, max=247)
         ),
-        vol.Required("name", default=d.get("name", "PM3255")): nonempty_name,
+        vol.Required("name", default=d.get("name", "PM3255")): str,
     }
     if initial:
         fields[vol.Optional("add_another", default=False)] = bool
@@ -151,6 +167,13 @@ class PowerLogicConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         errors = {}
         if user_input is not None:
             user_input = gateway_schema()(user_input)
+            user_input, errors = normalize_text_fields(user_input)
+            if errors:
+                return self.async_show_form(
+                    step_id="user",
+                    data_schema=gateway_schema(user_input),
+                    errors=errors,
+                )
             if endpoint_in_use(self.hass, user_input):
                 return self.async_abort(reason="already_configured")
             if user_input["energy_interval"] < user_input["scan_interval"]:
@@ -166,6 +189,13 @@ class PowerLogicConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         errors = {}
         if user_input is not None:
             user_input = meter_schema(initial=True)(user_input)
+            user_input, errors = normalize_text_fields(user_input)
+            if errors:
+                return self.async_show_form(
+                    step_id="meter",
+                    data_schema=meter_schema(user_input, initial=True),
+                    errors=errors,
+                )
             meter, error = await validate_meter(self.hass, self._settings, user_input)
             if error:
                 errors["base"] = error
@@ -206,6 +236,13 @@ class PowerLogicOptionsFlow(config_entries.OptionsFlowWithReload):
         errors = {}
         if user_input is not None:
             user_input = meter_schema()(user_input)
+            user_input, errors = normalize_text_fields(user_input)
+            if errors:
+                return self.async_show_form(
+                    step_id="add_meter",
+                    data_schema=meter_schema(user_input),
+                    errors=errors,
+                )
             settings = self.settings
             meter, error = await validate_meter(
                 self.hass, settings, user_input, exclude=self.config_entry.entry_id
@@ -245,6 +282,13 @@ class PowerLogicOptionsFlow(config_entries.OptionsFlowWithReload):
         errors = {}
         if user_input is not None:
             user_input = meter_schema()(user_input)
+            user_input, errors = normalize_text_fields(user_input)
+            if errors:
+                return self.async_show_form(
+                    step_id="edit_meter",
+                    data_schema=meter_schema(user_input),
+                    errors=errors,
+                )
             if user_input["unit_id"] == previous["unit_id"]:
                 meter, error = {**previous, "name": user_input["name"]}, None
             else:
@@ -287,6 +331,13 @@ class PowerLogicOptionsFlow(config_entries.OptionsFlowWithReload):
         errors = {}
         if user_input is not None:
             user_input = gateway_schema()(user_input)
+            user_input, errors = normalize_text_fields(user_input)
+            if errors:
+                return self.async_show_form(
+                    step_id="gateway",
+                    data_schema=gateway_schema(user_input),
+                    errors=errors,
+                )
             if endpoint_in_use(self.hass, user_input, self.config_entry.entry_id):
                 errors["base"] = "already_configured"
             elif user_input["energy_interval"] < user_input["scan_interval"]:

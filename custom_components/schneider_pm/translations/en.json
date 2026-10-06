@@ -31,7 +31,9 @@
       "already_configured": "Gateway or meter already configured.",
       "invalid_interval": "The energy interval must be at least the measurement interval.",
       "connection_conflict": "The connection is already in use with incompatible settings.",
-      "different_meter": "This address belongs to a different serial number. Add it as a new meter."
+      "different_meter": "This address belongs to a different serial number. Add it as a new meter.",
+      "invalid_name": "Enter a non-empty name.",
+      "invalid_host": "Enter an IP address or hostname without a URL, port or credentials."
     },
     "abort": {
       "already_configured": "Gateway or meter already configured."
@@ -95,7 +97,9 @@
       "already_configured": "Gateway or meter already configured.",
       "invalid_interval": "The energy interval must be at least the measurement interval.",
       "connection_conflict": "The connection is already in use with incompatible settings.",
-      "different_meter": "This address belongs to a different serial number. Add it as a new meter."
+      "different_meter": "This address belongs to a different serial number. Add it as a new meter.",
+      "invalid_name": "Enter a non-empty name.",
+      "invalid_host": "Enter an IP address or hostname without a URL, port or credentials."
     },
     "abort": {
       "last_meter": "To remove the last meter, delete the gateway integration entry."

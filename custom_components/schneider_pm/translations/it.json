@@ -31,7 +31,9 @@
       "already_configured": "Gateway o contatore già configurato.",
       "invalid_interval": "L’intervallo energie deve essere maggiore o uguale a quello delle misure.",
       "connection_conflict": "Connessione già utilizzata con impostazioni incompatibili.",
-      "different_meter": "A questo indirizzo risponde un contatore con numero di serie diverso. Aggiungilo come nuovo contatore."
+      "different_meter": "A questo indirizzo risponde un contatore con numero di serie diverso. Aggiungilo come nuovo contatore.",
+      "invalid_name": "Inserisci un nome non vuoto.",
+      "invalid_host": "Inserisci un indirizzo IP o un hostname senza URL, porta o credenziali."
     },
     "abort": {
       "already_configured": "Gateway o contatore già configurato."
@@ -95,7 +97,9 @@
       "already_configured": "Gateway o contatore già configurato.",
       "invalid_interval": "L’intervallo energie deve essere maggiore o uguale a quello delle misure.",
       "connection_conflict": "Connessione già utilizzata con impostazioni incompatibili.",
-      "different_meter": "A questo indirizzo risponde un contatore con numero di serie diverso. Aggiungilo come nuovo contatore."
+      "different_meter": "A questo indirizzo risponde un contatore con numero di serie diverso. Aggiungilo come nuovo contatore.",
+      "invalid_name": "Inserisci un nome non vuoto.",
+      "invalid_host": "Inserisci un indirizzo IP o un hostname senza URL, porta o credenziali."
     },
     "abort": {
       "last_meter": "Per rimuovere l’ultimo contatore elimina l’integrazione del gateway."
