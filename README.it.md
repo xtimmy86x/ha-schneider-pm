@@ -3,7 +3,7 @@
 Integrazione personalizzata per leggere i **PM3250 e PM3255** tramite un gateway
 Ethernet/RS485. Configurazione da interfaccia, senza YAML.
 
-**Versione 0.1.4, con supporto PM3250 e PM3255 sullo stesso gateway.** I test automatici
+**Versione 0.1.5, aggiornata l’API di collegamento dei contatori al gateway.** I test automatici
 utilizzano Home Assistant 2026.9.4 e un simulatore Modbus TCP locale.
 
 ## Installazione

@@ -1,6 +1,9 @@
 """Common meter entity identity."""
 
-from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.helpers.device_registry import (
+    DeviceInfo,
+    async_get_device_id_by_identifier,
+)
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
@@ -22,5 +25,7 @@ class MeterEntity(CoordinatorEntity[MeterCoordinator]):
             manufacturer="Schneider Electric",
             model=config["model"],
             serial_number=config["serial"],
-            via_device=(DOMAIN, entry_id),
+            via_device_id=async_get_device_id_by_identifier(
+                coordinator.hass, (DOMAIN, entry_id), config_entry_id=entry_id
+            ),
         )

@@ -4,7 +4,7 @@ Custom integration for **Schneider Electric PM3250 and PM3255** meters connected
 Ethernet/RS485 gateway. Configure the gateway once, then add each meter by its
 Modbus address. No YAML is required.
 
-**Version 0.1.4 — supports PM3250 and PM3255 on the same gateway.**
+**Version 0.1.5 — uses the current Home Assistant gateway/device linking API.**
 Automated tests use Home Assistant 2026.9.4 and a local Modbus TCP simulator;
 they do not replace checking readings against your meter display.
 
