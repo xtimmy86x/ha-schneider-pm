@@ -1,0 +1,248 @@
+{
+  "title": "Schneider PowerLogic",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Gateway PowerLogic",
+        "description": "Configura il collegamento al gateway. I parametri RS485 si impostano sul gateway e sui contatori.",
+        "data": {
+          "name": "Nome",
+          "host": "Indirizzo IP o hostname",
+          "port": "Porta TCP",
+          "protocol": "Protocollo",
+          "scan_interval": "Intervallo misure (secondi)",
+          "energy_interval": "Intervallo energie (secondi)"
+        }
+      },
+      "meter": {
+        "title": "Aggiungi PM3255",
+        "description": "Il modello e il numero di serie verranno letti dal contatore.",
+        "data": {
+          "name": "Nome contatore",
+          "unit_id": "Indirizzo Modbus (1–247)",
+          "add_another": "Aggiungi un altro contatore"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Impossibile leggere il contatore. Verifica IP, porta, protocollo, indirizzo Modbus e parametri RS485.",
+      "unsupported_model": "Il dispositivo non è un PM3255 supportato.",
+      "duplicate_address": "Indirizzo Modbus già utilizzato su questo gateway.",
+      "already_configured": "Gateway o contatore già configurato.",
+      "invalid_interval": "L’intervallo energie deve essere maggiore o uguale a quello delle misure.",
+      "connection_conflict": "Connessione già utilizzata con impostazioni incompatibili.",
+      "different_meter": "A questo indirizzo risponde un contatore con numero di serie diverso. Aggiungilo come nuovo contatore.",
+      "invalid_name": "Inserisci un nome non vuoto.",
+      "invalid_host": "Inserisci un indirizzo IP o un hostname senza URL, porta o credenziali."
+    },
+    "abort": {
+      "already_configured": "Gateway o contatore già configurato."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "menu_options": {
+          "add_meter": "Aggiungi contatore",
+          "select_meter": "Modifica contatore",
+          "remove_meter": "Rimuovi contatore",
+          "gateway": "Impostazioni gateway"
+        }
+      },
+      "gateway": {
+        "title": "Gateway PowerLogic",
+        "description": "Configura il collegamento al gateway. I parametri RS485 si impostano sul gateway e sui contatori.",
+        "data": {
+          "name": "Nome",
+          "host": "Indirizzo IP o hostname",
+          "port": "Porta TCP",
+          "protocol": "Protocollo",
+          "scan_interval": "Intervallo misure (secondi)",
+          "energy_interval": "Intervallo energie (secondi)"
+        }
+      },
+      "add_meter": {
+        "title": "Aggiungi PM3255",
+        "description": "Il modello e il numero di serie verranno letti dal contatore.",
+        "data": {
+          "name": "Nome contatore",
+          "unit_id": "Indirizzo Modbus (1–247)"
+        }
+      },
+      "select_meter": {
+        "title": "Modifica contatore",
+        "data": {
+          "meter": "Contatore"
+        }
+      },
+      "edit_meter": {
+        "title": "Modifica PM3255",
+        "data": {
+          "name": "Nome contatore",
+          "unit_id": "Indirizzo Modbus (1–247)"
+        }
+      },
+      "remove_meter": {
+        "title": "Rimuovi contatore",
+        "data": {
+          "meter": "Contatore"
+        },
+        "description": "Il contatore e le sue entità verranno rimossi da questa integrazione."
+      }
+    },
+    "error": {
+      "cannot_connect": "Impossibile leggere il contatore. Verifica IP, porta, protocollo, indirizzo Modbus e parametri RS485.",
+      "unsupported_model": "Il dispositivo non è un PM3255 supportato.",
+      "duplicate_address": "Indirizzo Modbus già utilizzato su questo gateway.",
+      "already_configured": "Gateway o contatore già configurato.",
+      "invalid_interval": "L’intervallo energie deve essere maggiore o uguale a quello delle misure.",
+      "connection_conflict": "Connessione già utilizzata con impostazioni incompatibili.",
+      "different_meter": "A questo indirizzo risponde un contatore con numero di serie diverso. Aggiungilo come nuovo contatore.",
+      "invalid_name": "Inserisci un nome non vuoto.",
+      "invalid_host": "Inserisci un indirizzo IP o un hostname senza URL, porta o credenziali."
+    },
+    "abort": {
+      "last_meter": "Per rimuovere l’ultimo contatore elimina l’integrazione del gateway."
+    }
+  },
+  "selector": {
+    "protocol": {
+      "options": {
+        "tcp": "Modbus TCP → RTU (gateway)",
+        "rtuovertcp": "Modbus RTU su TCP (trasparente)"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "current_l1": {
+        "name": "Corrente L1"
+      },
+      "current_l2": {
+        "name": "Corrente L2"
+      },
+      "current_l3": {
+        "name": "Corrente L3"
+      },
+      "current_neutral": {
+        "name": "Corrente neutro"
+      },
+      "current_average": {
+        "name": "Corrente media"
+      },
+      "voltage_l1_l2": {
+        "name": "Tensione L1 L2"
+      },
+      "voltage_l2_l3": {
+        "name": "Tensione L2 L3"
+      },
+      "voltage_l3_l1": {
+        "name": "Tensione L3 L1"
+      },
+      "voltage_ll_average": {
+        "name": "Tensione L-L media"
+      },
+      "voltage_l1_n": {
+        "name": "Tensione L1 n"
+      },
+      "voltage_l2_n": {
+        "name": "Tensione L2 n"
+      },
+      "voltage_l3_n": {
+        "name": "Tensione L3 n"
+      },
+      "voltage_ln_average": {
+        "name": "Tensione L-N media"
+      },
+      "active_power_l1": {
+        "name": "Potenza attiva L1"
+      },
+      "active_power_l2": {
+        "name": "Potenza attiva L2"
+      },
+      "active_power_l3": {
+        "name": "Potenza attiva L3"
+      },
+      "active_power_total": {
+        "name": "Potenza attiva totale"
+      },
+      "reactive_power_l1": {
+        "name": "Potenza reattiva L1"
+      },
+      "reactive_power_l2": {
+        "name": "Potenza reattiva L2"
+      },
+      "reactive_power_l3": {
+        "name": "Potenza reattiva L3"
+      },
+      "reactive_power_total": {
+        "name": "Potenza reattiva totale"
+      },
+      "apparent_power_l1": {
+        "name": "Potenza apparente L1"
+      },
+      "apparent_power_l2": {
+        "name": "Potenza apparente L2"
+      },
+      "apparent_power_l3": {
+        "name": "Potenza apparente L3"
+      },
+      "apparent_power_total": {
+        "name": "Potenza apparente totale"
+      },
+      "power_factor_l1": {
+        "name": "Fattore di potenza L1"
+      },
+      "power_factor_l2": {
+        "name": "Fattore di potenza L2"
+      },
+      "power_factor_l3": {
+        "name": "Fattore di potenza L3"
+      },
+      "power_factor_total": {
+        "name": "Fattore di potenza totale"
+      },
+      "frequency": {
+        "name": "Frequenza"
+      },
+      "active_energy_import": {
+        "name": "Energia attiva importata"
+      },
+      "active_energy_export": {
+        "name": "Energia attiva esportata"
+      },
+      "reactive_energy_import": {
+        "name": "Energia reattiva importata"
+      },
+      "reactive_energy_export": {
+        "name": "Energia reattiva esportata"
+      },
+      "apparent_energy_import": {
+        "name": "Energia apparente importata"
+      },
+      "apparent_energy_export": {
+        "name": "Energia apparente esportata"
+      },
+      "active_energy_tariff_1": {
+        "name": "Energia attiva tariffa 1"
+      },
+      "active_energy_tariff_2": {
+        "name": "Energia attiva tariffa 2"
+      },
+      "active_energy_tariff_3": {
+        "name": "Energia attiva tariffa 3"
+      },
+      "active_energy_tariff_4": {
+        "name": "Energia attiva tariffa 4"
+      },
+      "last_success": {
+        "name": "Ultima lettura riuscita"
+      }
+    },
+    "binary_sensor": {
+      "connection": {
+        "name": "Connessione"
+      }
+    }
+  }
+}

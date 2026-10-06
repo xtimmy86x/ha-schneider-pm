@@ -1,0 +1,13 @@
+{
+  "domain": "schneider_pm",
+  "name": "Schneider PowerLogic",
+  "codeowners": ["@xtimmy86x"],
+  "config_flow": true,
+  "dependencies": ["modbus"],
+  "documentation": "https://github.com/xtimmy86x/ha-schneider-pm",
+  "integration_type": "hub",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/xtimmy86x/ha-schneider-pm/issues",
+  "requirements": [],
+  "version": "0.1.1"
+}

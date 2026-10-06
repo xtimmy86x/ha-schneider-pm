@@ -1,0 +1,248 @@
+{
+  "title": "Schneider PowerLogic",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Gateway PowerLogic",
+        "description": "Configure the gateway connection. RS485 parameters are configured on the gateway and meters.",
+        "data": {
+          "name": "Name",
+          "host": "IP address or hostname",
+          "port": "TCP port",
+          "protocol": "Protocol",
+          "scan_interval": "Measurement interval (seconds)",
+          "energy_interval": "Energy interval (seconds)"
+        }
+      },
+      "meter": {
+        "title": "Add PM3255",
+        "description": "The model and serial number will be read from the meter.",
+        "data": {
+          "name": "Meter name",
+          "unit_id": "Modbus address (1–247)",
+          "add_another": "Add another meter"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot read the meter. Check host, port, protocol, unit ID and RS485 settings.",
+      "unsupported_model": "The device is not a supported PM3255.",
+      "duplicate_address": "This Modbus address is already used on this gateway.",
+      "already_configured": "Gateway or meter already configured.",
+      "invalid_interval": "The energy interval must be at least the measurement interval.",
+      "connection_conflict": "The connection is already in use with incompatible settings.",
+      "different_meter": "This address belongs to a different serial number. Add it as a new meter.",
+      "invalid_name": "Enter a non-empty name.",
+      "invalid_host": "Enter an IP address or hostname without a URL, port or credentials."
+    },
+    "abort": {
+      "already_configured": "Gateway or meter already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "menu_options": {
+          "add_meter": "Add meter",
+          "select_meter": "Edit meter",
+          "remove_meter": "Remove meter",
+          "gateway": "Gateway settings"
+        }
+      },
+      "gateway": {
+        "title": "Gateway PowerLogic",
+        "description": "Configure the gateway connection. RS485 parameters are configured on the gateway and meters.",
+        "data": {
+          "name": "Name",
+          "host": "IP address or hostname",
+          "port": "TCP port",
+          "protocol": "Protocol",
+          "scan_interval": "Measurement interval (seconds)",
+          "energy_interval": "Energy interval (seconds)"
+        }
+      },
+      "add_meter": {
+        "title": "Add PM3255",
+        "description": "The model and serial number will be read from the meter.",
+        "data": {
+          "name": "Meter name",
+          "unit_id": "Modbus address (1–247)"
+        }
+      },
+      "select_meter": {
+        "title": "Edit meter",
+        "data": {
+          "meter": "Meter"
+        }
+      },
+      "edit_meter": {
+        "title": "Edit PM3255",
+        "data": {
+          "name": "Meter name",
+          "unit_id": "Modbus address (1–247)"
+        }
+      },
+      "remove_meter": {
+        "title": "Remove meter",
+        "data": {
+          "meter": "Meter"
+        },
+        "description": "The meter and its entities will be removed from this integration."
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot read the meter. Check host, port, protocol, unit ID and RS485 settings.",
+      "unsupported_model": "The device is not a supported PM3255.",
+      "duplicate_address": "This Modbus address is already used on this gateway.",
+      "already_configured": "Gateway or meter already configured.",
+      "invalid_interval": "The energy interval must be at least the measurement interval.",
+      "connection_conflict": "The connection is already in use with incompatible settings.",
+      "different_meter": "This address belongs to a different serial number. Add it as a new meter.",
+      "invalid_name": "Enter a non-empty name.",
+      "invalid_host": "Enter an IP address or hostname without a URL, port or credentials."
+    },
+    "abort": {
+      "last_meter": "To remove the last meter, delete the gateway integration entry."
+    }
+  },
+  "selector": {
+    "protocol": {
+      "options": {
+        "tcp": "Modbus TCP → RTU (gateway)",
+        "rtuovertcp": "Modbus RTU over TCP (transparent)"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "current_l1": {
+        "name": "Current L1"
+      },
+      "current_l2": {
+        "name": "Current L2"
+      },
+      "current_l3": {
+        "name": "Current L3"
+      },
+      "current_neutral": {
+        "name": "Current neutral"
+      },
+      "current_average": {
+        "name": "Current average"
+      },
+      "voltage_l1_l2": {
+        "name": "Voltage L1 L2"
+      },
+      "voltage_l2_l3": {
+        "name": "Voltage L2 L3"
+      },
+      "voltage_l3_l1": {
+        "name": "Voltage L3 L1"
+      },
+      "voltage_ll_average": {
+        "name": "Voltage ll average"
+      },
+      "voltage_l1_n": {
+        "name": "Voltage L1 n"
+      },
+      "voltage_l2_n": {
+        "name": "Voltage L2 n"
+      },
+      "voltage_l3_n": {
+        "name": "Voltage L3 n"
+      },
+      "voltage_ln_average": {
+        "name": "Voltage ln average"
+      },
+      "active_power_l1": {
+        "name": "Active power L1"
+      },
+      "active_power_l2": {
+        "name": "Active power L2"
+      },
+      "active_power_l3": {
+        "name": "Active power L3"
+      },
+      "active_power_total": {
+        "name": "Active power total"
+      },
+      "reactive_power_l1": {
+        "name": "Reactive power L1"
+      },
+      "reactive_power_l2": {
+        "name": "Reactive power L2"
+      },
+      "reactive_power_l3": {
+        "name": "Reactive power L3"
+      },
+      "reactive_power_total": {
+        "name": "Reactive power total"
+      },
+      "apparent_power_l1": {
+        "name": "Apparent power L1"
+      },
+      "apparent_power_l2": {
+        "name": "Apparent power L2"
+      },
+      "apparent_power_l3": {
+        "name": "Apparent power L3"
+      },
+      "apparent_power_total": {
+        "name": "Apparent power total"
+      },
+      "power_factor_l1": {
+        "name": "Power factor L1"
+      },
+      "power_factor_l2": {
+        "name": "Power factor L2"
+      },
+      "power_factor_l3": {
+        "name": "Power factor L3"
+      },
+      "power_factor_total": {
+        "name": "Power factor total"
+      },
+      "frequency": {
+        "name": "Frequency"
+      },
+      "active_energy_import": {
+        "name": "Active energy import"
+      },
+      "active_energy_export": {
+        "name": "Active energy export"
+      },
+      "reactive_energy_import": {
+        "name": "Reactive energy import"
+      },
+      "reactive_energy_export": {
+        "name": "Reactive energy export"
+      },
+      "apparent_energy_import": {
+        "name": "Apparent energy import"
+      },
+      "apparent_energy_export": {
+        "name": "Apparent energy export"
+      },
+      "active_energy_tariff_1": {
+        "name": "Active energy tariff 1"
+      },
+      "active_energy_tariff_2": {
+        "name": "Active energy tariff 2"
+      },
+      "active_energy_tariff_3": {
+        "name": "Active energy tariff 3"
+      },
+      "active_energy_tariff_4": {
+        "name": "Active energy tariff 4"
+      },
+      "last_success": {
+        "name": "Last successful read"
+      }
+    },
+    "binary_sensor": {
+      "connection": {
+        "name": "Connection"
+      }
+    }
+  }
+}

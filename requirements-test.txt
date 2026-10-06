@@ -1,0 +1,6 @@
+homeassistant==2026.9.4
+pytest-homeassistant-custom-component==0.13.367
+modbus-connection[tmodbus]==4.10.0
+pymodbus==3.13.1
+pytest-cov==7.1.0
+ruff==0.16.10
